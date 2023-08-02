@@ -1,0 +1,17 @@
+stages:
+- source
+- build
+- signed source
+- signed build
+- deploy
+
+include:
+- local: .gitlab/ci/source.yml
+- project: gardenlinux/gardenlinux-package-build
+  file:
+  - pipeline/workflow.yml
+  - pipeline/variables.yml
+  - pipeline/build.yml
+  - pipeline/signed-source.yml
+  - pipeline/signed-build.yml
+  - pipeline/deploy.yml
