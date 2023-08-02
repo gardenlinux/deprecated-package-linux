@@ -1,0 +1,5 @@
+gardenlinux-kernel (6.1) gardenlinux; urgency=medium
+
+  * Initial Garden Linux Kernel meta packages
+
+ -- Vincent Riesop <v.riesop@sap.com>  Wed, 02 Aug 2023 18:33:42 +0000

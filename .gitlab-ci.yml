@@ -1,17 +1,10 @@
-stages:
-- source
-- build
-- signed source
-- signed build
-- deploy
+variables:
+  BUILD_ARCH_ALL: ''
+  BUILD_ARCH_ARM64: 'true'
+  BUILD_ARCH_AMD64: 'true'
 
 include:
-- local: .gitlab/ci/source.yml
 - project: gardenlinux/gardenlinux-package-build
   file:
-  - pipeline/workflow.yml
-  - pipeline/variables.yml
-  - pipeline/build.yml
-  - pipeline/signed-source.yml
-  - pipeline/signed-build.yml
-  - pipeline/deploy.yml
+  - pipeline/pipeline-native.yml
+
