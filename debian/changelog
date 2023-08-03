@@ -1,6 +1,13 @@
+gardenlinux-kernel (6.1) gardenlinux; urgency=medium
+
+  * Metapackage for 6.1 kernel
+  * include this package explicitly if you need it in older garden linux releases.
+
+-- Vincent Riesop <v.riesop@sap.com>  Wed, 02 Aug 2023 18:33:42 +0000
+
 gardenlinux-kernel (5.15) gardenlinux; urgency=medium
 
   * Initial Garden Linux Kernel meta package
   * Kernel Version for Garden Linux 934 is 5.15
 
- -- Vincent Riesop <v.riesop@sap.com>  Wed, 02 Aug 2023 18:33:42 +0000
+-- Vincent Riesop <v.riesop@sap.com>  Wed, 02 Aug 2023 18:33:42 +0000
