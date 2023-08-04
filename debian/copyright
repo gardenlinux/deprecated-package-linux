@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Linux kernel
-Source: https://www.kernel.org/pub/linux/kernel/
+Upstream-Name: Garden Linux Kernel
+Source: https://gitlab.com/gardenlinux/gardenlinux-package-linux/
 
 Files: debian/*
 Copyright: 2023 Garden Linux Maintainer <contact@gardenlinux.io>
