@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -eufo pipefail
+
+main() (
+	repo="$1"
+	dist="$2"
+	match="$3"
+
+	mkdir -p .build
+
+	release="$(download_gpg "$repo/dists/$dist/InRelease")"
+	for path in main/binary-{all,amd64,arm64}/Packages; do
+		packages="$(download_from_release "$repo" "$dist" "$path.gz" < "$release")"
+		gzip -d < "$packages" | awk -F ': ' 'NF == 0 { if(pkg["Source"] ~ /^('"$match"')$/) { print pkg["Filename"], pkg["SHA256"] }; delete pkg; next; } !/^ / { pkg[$1] = $2 }'
+	done | while read path hash; do
+		file="$(download_sha256sum "$hash" "$repo/$path")"
+		mv "$file" ".build/$(basename "$path")"
+	done
+)
+
+download_gpg() (
+	echo "$1" >&2
+	file="$(mktemp)"
+	if curl "$1" | gpg --verify --output - > "$file"; then
+		echo "$file"
+	else
+		rm "$file"
+		exit 1
+	fi
+)
+
+download_sha256sum() (
+	echo "$2" >&2
+	file="$(mktemp)"
+	curl "$2" > "$file"
+	hash="$(sha256sum "$file" | head -c 64)"
+	if [ "$hash" != "$1" ]; then
+		echo "invalid sha256sum" >&2
+		rm "$file"
+		exit 1
+	fi
+	echo "$file"
+)
+
+download_from_release() (
+	set -e
+	repo="$1"
+	dist="$2"
+	path="$3"
+	hash="$(awk -v file="$path" '!/^ / { flag=0 } flag && $3 == file { print $1 } /^SHA256:$/ { flag = 1 }')"
+	file="$(download_sha256sum "$hash" "$repo/dists/$dist/$path")"
+	echo "$file"
+)
+
+main "$@"

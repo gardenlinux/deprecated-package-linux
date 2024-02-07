@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: gardenlinux/gardenlinux
+          path: gardenlinux
+      - name: import from existing repo
+        run: |
+          gpg --import < gardenlinux/gardenlinux.asc
+          ./import_from_repo https://repo.gardenlinux.io/gardenlinux today 'linux.*|gardenlinux-kernel'
+      - name: publish release
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ls -lah
+          gh release create import/repo.gardenlinux.io --title "imported from existing repo.gardenlinux.io" --notes "> [!CAUTION]\n> Hacky solution to work around kernel build not yet working on GitHub actions\n\ncreated by GitHub actions run [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" .build/*
